@@ -1,0 +1,41 @@
+
+
+.page {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: var(--navbar-height);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.fill-container {
+	height: 100%;
+	width: 100%;
+}
+
+
+.vh-align, .vhalign {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.v-align, .valign {
+	display: flex;
+	align-items: center;
+}
+
+.h-align, .halign {
+	display: flex;
+	justify-content: center;
+}
+
+.center-align {
+	text-align: center;
+}
+
+.grey-text {
+	color: gray;
+}
