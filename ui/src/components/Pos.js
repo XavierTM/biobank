@@ -22,8 +22,6 @@ const divPosStyle = css({
 class Pos extends Component {
 
    waitForPayment = (id) => {
-
-      console.log({ id });
       return new Promise((resolve, reject) => {
          sse.once(`payment-rejection-${id}`, data => {
             const { reason } = data;

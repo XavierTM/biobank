@@ -13,8 +13,10 @@ class SSEConnection {
 
       res.on('close', () => {
          this._connected = false;
+         console.log(`Connection '${this._id}' disconnected`);
       });
 
+      console.log(`Connection '${this._id}' connected`);
       this._resendMessages();
    }
 
@@ -43,6 +45,8 @@ class SSEConnection {
       res.write(`event: ${eventName}\n`);
       res.write(`data: ${JSON.stringify(data)}\n\n`);
 
+      console.log(`Pushed (${eventName})`, data)
+
    }
 
    constructor(id, res) {
@@ -60,15 +64,21 @@ const userConnectionLists = new Map();
 
 const router = Router();
 
-router.get('/:access_token', (req, res) => {
+
+router.get('/test', (req, res) => {
+
+   const message = req.query.message;
+
+   Array.from(userConnectionLists.keys()).forEach(key => {
+      sendEvent('test',  key, { message });
+   });
+
+   res.send();
+});
+
+router.get('/:userId', (req, res) => {
 
    try {
-
-      const payload = jwt.verify(req.params.access_token, process.env.JWT_SECRET);
-      const { user, exp } = payload || {};
-
-      if (exp < Date.now())
-         return res.sendStatus(401);
 
       const headers = {
          'Content-Type': 'text/event-stream',
@@ -82,7 +92,7 @@ router.get('/:access_token', (req, res) => {
       res.write(`id: ${id}\n\n`);
 
       // add connection to list
-      const userId = user.id;
+      const userId = parseInt(req.params.userId);
       let conn = connectionsMap.get(id);
 
       if (conn) {
@@ -110,6 +120,7 @@ router.get('/:access_token', (req, res) => {
 
 
 });
+
 
 
 function sendEvent(eventName, userId, data) {

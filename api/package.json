@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@xavisoft/auth": "^1.0.1",
+    "@xavisoft/auth": "^1.2.0",
     "@xavisoft/joi": "^0.1.0",
     "bcrypt": "^5.1.0",
     "casual": "^1.6.2",

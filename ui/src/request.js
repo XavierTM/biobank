@@ -28,12 +28,13 @@ initAuth({
 const baseUrl = process.env.REACT_APP_API_URL;
 const urlObject = new URL(window.location.href);
 
-if (urlObject.protocol === 'file:') {
+if (urlObject.protocol === 'file:' || urlObject.pathname.indexOf('index.html') > 0) {
    axios.interceptors.request.use(config => {
       config.url = `${baseUrl}${config.url}`; console.log(config.url)
       return config;
    });
 }
+
 
 axios.interceptors.response.use(null, err => {
 

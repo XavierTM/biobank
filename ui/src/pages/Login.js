@@ -7,7 +7,8 @@ import { errorToast } from '../toast';
 import { hideLoading, showLoading } from '../loading';
 import request from '../request';
 import swal from 'sweetalert';
-import { getSecretByFingerpint } from "../utils";
+import { getSecretByFingerpint, storeUserId } from "../utils";
+import sse from "../sse";
 
 
 
@@ -34,8 +35,13 @@ class Login extends Page {
       try {
 
          showLoading();
-         await request.post('/api/login', credentials);
+         const res = await request.post('/api/login', credentials);
          window.App.redirect('/dashboard');
+
+         // connect sse
+         const userId = res.data.id;
+         storeUserId(userId);
+         sse.connect();
 
       } catch (err) {
          swal(String(err));

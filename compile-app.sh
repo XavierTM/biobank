@@ -1,4 +1,5 @@
 
+# clear the screen
 clear
 
 # compile react

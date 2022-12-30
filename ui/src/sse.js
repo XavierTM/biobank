@@ -1,10 +1,16 @@
 
 import EventEmitter from 'events';
-import { delay } from './utils';
+import { delay, getUserId } from './utils';
 
-const { LOCAL_STORAGE_KEY='openstack-xavisoft-auth'  } = require('@xavisoft/auth/constants')
+let url
 
-const url = `${process.env.REACT_APP_API_URL}/sse`;
+if (process.env.NODE_ENV !== 'production')
+   url = 'http://localhost:8080/sse'; // in development
+else if (window.location.href.indexOf('localhost/index.html') > 1)
+   url = `${process.env.REACT_APP_API_URL}/sse`; // cordova
+else
+   url = '/sse' // on the web app
+
 
 
 class SSEConnection extends EventEmitter {
@@ -16,21 +22,30 @@ class SSEConnection extends EventEmitter {
       'payment-request'
    ]
 
-   _readAuthTokensFromLocalStorage() {
+   connected = false;
 
+   disconnect() {
       try {
-         const json = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-         return JSON.parse(json) || {};
-      } catch {
-         return {};
-      }
+         this.eventSource.close();
+      } catch {};
+      this.eventSource = null;
+      this.connected = false;
    }
 
    connect() {
 
-      const { access_token } = this._readAuthTokensFromLocalStorage();
+      const userId = getUserId();
 
-      const eventSource = new window.EventSource(`${this._url}/${access_token}`);
+      if (!userId) {
+         setTimeout(() => {
+            this.connect();
+         }, 10000);
+         return;
+      }
+
+      this.disconnect();
+
+      const eventSource = new window.EventSource(`${this._url}/${userId}`);
 
       SSEConnection.EVENT_NAMES.forEach(eventName => {
          eventSource.addEventListener(eventName, event => {
@@ -41,9 +56,31 @@ class SSEConnection extends EventEmitter {
       });
 
       eventSource.addEventListener('error', async (ev) => {
-         await delay(3000);
+
+         console.log(ev);
+
+         if (this.connected)
+            return; // because it will auto reconnect anyway
+
+         await delay(5000);
          this.connect();
+
+         console.error('========================');
+         console.error('SSE DISCONNECTED');
+         console.error('========================');
       });
+
+      eventSource.addEventListener('open', () => {
+
+         this.connected = true;
+
+         console.log('========================');
+         console.log("SSE CONNECTED"); 
+         console.log('========================');
+
+      });
+
+      this.eventSource = eventSource;
 
    }
 
