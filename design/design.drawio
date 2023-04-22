@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-04-22T09:22:18.439Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="pXYXnQWqMftDCk-JnJMP" version="21.1.2" type="device" pages="2">
+<mxfile host="Electron" modified="2023-04-22T10:38:46.174Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="5c8_Ci_bXFQH7WlnxU9V" version="21.1.2" type="device" pages="2">
   <diagram id="NDXmF5zCLqvOnmlFXexP" name="Use case">
     <mxGraphModel dx="1306" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -126,7 +126,7 @@
         <mxCell id="rtVehsE_fkn_IAQuL6EJ-2" value="- id INT (PK)&#xa;- name STRING&#xa;- user INT (FK)&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" parent="rtVehsE_fkn_IAQuL6EJ-1" vertex="1">
           <mxGeometry y="30" width="160" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="DpgSkqnY9INF0VIeC5A3-1" value="PasswordResetRequest" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+        <mxCell id="DpgSkqnY9INF0VIeC5A3-1" value="AccountRecoveryRequest" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
           <mxGeometry x="340" y="370" width="200" height="160" as="geometry" />
         </mxCell>
         <mxCell id="DpgSkqnY9INF0VIeC5A3-2" value="- id INT (PK)&#xa;- ref_code STRING&#xa;- user INT (FK)&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="DpgSkqnY9INF0VIeC5A3-1">
