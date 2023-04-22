@@ -15,6 +15,7 @@ class AccountRecoveryRequest extends Model {
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue: () => casual.integer(100000, 999999),
+            unique: true
          },
       }, { sequelize });
    }

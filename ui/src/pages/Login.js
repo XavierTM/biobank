@@ -8,6 +8,7 @@ import request from '../request';
 import swal from 'sweetalert';
 import { getSecretByFingerpint, storeUserId } from "../utils";
 import sse from "../sse";
+import BiometricSetup from "../components/BiometricSetup";
 
 
 
@@ -32,6 +33,18 @@ const divLoginStyle = css({
 
 class Login extends Page {
 
+
+   state = {
+      biometricSetupModalOpen: false,
+   }
+
+   openBiometricSetupModal = () => {
+      return this.updateState({ biometricSetupModalOpen: true });
+   }
+
+   closeBiometricSetupModal = () => {
+      return this.updateState({ biometricSetupModalOpen: false });
+   }
 
    authenticate = async (credentials) => {
 
@@ -88,7 +101,12 @@ class Login extends Page {
             </div>
 
             <div className="halign">
-               <Link to="">Setup biometrics</Link>
+               <Link to="" onClick={this.openBiometricSetupModal}>Setup biometrics</Link>
+
+               <BiometricSetup
+                  open={this.state.biometricSetupModalOpen}
+                  close={this.closeBiometricSetupModal}
+               />
             </div>
          </div>
       </div>

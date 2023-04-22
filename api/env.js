@@ -13,7 +13,9 @@ function presenceChecker(keys=[]) {
 const BASE_KEYS = [
    'JWT_SECRET',
    'PORT',
-   'NODE_ENV'
+   'NODE_ENV',
+   'IMAP_USERNAME',
+   'IMAP_PASSWORD',
 ];
 
 

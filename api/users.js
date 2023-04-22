@@ -4,6 +4,9 @@ const Joi = require('@xavisoft/joi');
 const { ACCOUNT_TYPES, PASSWORD_SALT_ROUNDS } = require("./config");
 const User = require("./db/User");
 const Merchant = require("./db/Merchant");
+const AccountRecoveryRequest = require("./db/AccountRecoveryRequest");
+const mail = require("./mail");
+const capitalize = require("capitalize");
 
 
 
@@ -115,23 +118,77 @@ users.get('/logged', async (req, res) => {
    }
 });
 
+users.get('/otp', async (req, res) => {
+
+   try {
+
+      // validation
+      const email = req.query.email.toLowerCase();
+
+      const schema = {
+         email: Joi.string().email().required(),
+      }
+
+      const error = Joi.getError({ email }, schema);
+      if (error)
+         return res.status(400).send(error);
+
+      const user = await User.findOne({ where: { email }});
+
+      if (!user)
+         return res.status(400).send('Email doesnt exist on this platform');
+
+      const accountRecoveryRequest = await AccountRecoveryRequest.create({ user: user.id });
+      const otp = accountRecoveryRequest.otp;
+
+      // create email
+      const html = `Hi ${capitalize(user.name)}. Your OPT is <b>${otp}</b>`;
+      const subject = 'BioBank OTP'
+
+      await mail.send({
+         to: email,
+         subject,
+         html,
+      });
+
+      res.send();
+
+      
+
+   } catch (err) {
+      status_500(err, res);
+   }
+});
+
 users.get('/secret', async (req, res) => {
 
    try {
 
-      // auth
-      if (!req.auth)
-         return res.sendStatus(401);
+      // validation
+      let { email, otp } = req.query;
+      email = email.toLowerCase();
 
-      const id  = req.auth.user.id;
+      const schema = {
+         email: Joi.string().email().required(),
+         otp: Joi.number().integer().required(),
+      }
+
+      const error = Joi.getError({ email, otp }, schema);
+      if (error)
+         return res.status(400).send(error);
 
       const user = await User.findOne({
-         where: { id },
+         where: { email },
          attributes: [ 'secret' ]
       });
 
       if (!user)
-         throw new Error('User has valid login, but cannnot be found in the database');
+         return res.status(400).send('Email doesnt exist on this platform');
+
+      const accountRecoveryRequest = await AccountRecoveryRequest.findOne({ where: { otp } });
+
+      if (!accountRecoveryRequest)
+         return res.status(400).send('Invalid OTP');
 
       res.send(user);
 
