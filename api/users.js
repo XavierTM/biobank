@@ -27,10 +27,10 @@ users.post('/', async (req, res) => {
 
       // check email
       req.body.email = req.body.email.toLowerCase();
-      const count = User.count({ where: { email: req.body.email }});
+      const count = await User.count({ where: { email: req.body.email }});
 
       if (count > 0)
-         return res.status(409).send('Email already in use');
+         return res.status(409).send(`Email "${req.body.email}" already in use`);
 
       const error = Joi.getError(req.body, schema);
       if (error)
