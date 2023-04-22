@@ -12,10 +12,8 @@ import sse from "../sse";
 import PaymentApproval from "../components/PaymentApproval";
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PaidIcon from '@mui/icons-material/Paid';
-
 
 
 
@@ -109,36 +107,6 @@ class Dashboard extends Page {
    onMerchantAdded = async (merchant) => {
       const merchants = [ ...this.state.merchants, merchant ];
       await this.updateState({ merchants, addMerchantModalOpen: false });
-   }
-
-   _enrollFingeprint(secret) {
-      return new Promise((resolve, reject) => {
-         window.Fingerprint.registerBiometricSecret({
-            description: "Enroll your finger",
-            secret,
-            invalidateOnEnrollment: true,
-            disableBackup: true,
-          }, resolve, (err) => {
-            reject (new Error(err.message));
-          });
-      });
-   }
-
-   enrollFingeprint = async () => {
-
-      try {
-
-         showLoading()
-
-         const res = await request.get('/api/users/secret');
-         const { secret } = res.data;
-         await this._enrollFingeprint(secret);
-
-      } catch (err) {
-         swal(String(err));
-      } finally {
-         hideLoading();
-      }
    }
 
    fetchData = async () => {
@@ -302,15 +270,6 @@ class Dashboard extends Page {
             </>
          }
 
-         let enrollJSX;
-
-         if (this.state.fingerprintAvailable) {
-            enrollJSX = <Button style={{ color: 'white' }} onClick={this.enrollFingeprint}>
-               <FingerprintIcon />
-               ENROLL
-            </Button>
-         } 
-
          contentJSX = <> 
 
             <Grid container spacing={2}>
@@ -381,7 +340,6 @@ class Dashboard extends Page {
                   paddingRight: 30,
                }}
             >
-               {enrollJSX}
                
                <Button style={{ color: 'white' }} onClick={this.openAddMerchantModal}>
                   <AddIcon />
