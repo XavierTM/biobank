@@ -6,9 +6,42 @@ function delay(millis) {
    })
 }
 
+const DEVELOPMENT_SECRET_KEY = 'development-secret-key';
+
 function getSecretByFingerpint(description) {
+
+   if (process.env.NODE_ENV === 'development') {
+      const secret = window.localStorage.getItem(DEVELOPMENT_SECRET_KEY);
+
+      if (!secret)
+         throw new Error('Secret not available');
+
+      return secret;
+
+   }
+
    return new Promise((resolve, reject) => {
       window.Fingerprint.loadBiometricSecret({ description }, resolve, reject);
+   });
+}
+
+function enrollFingeprint(secret) {
+
+   if (process.env.NODE_ENV === 'development') {
+      window.localStorage.setItem(DEVELOPMENT_SECRET_KEY, secret);
+      return
+   }
+
+
+   return new Promise((resolve, reject) => {
+      window.Fingerprint.registerBiometricSecret({
+         description: "Enroll your finger",
+         secret,
+         invalidateOnEnrollment: true,
+         disableBackup: true,
+       }, resolve, (err) => {
+         reject (new Error(err.message));
+       });
    });
 }
 
@@ -36,6 +69,7 @@ function decodeJWT(token) {
 export {
    decodeJWT,
    delay,
+   enrollFingeprint,
    getSecretByFingerpint,
    getUserId,
    storeUserId,
