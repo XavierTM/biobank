@@ -74,7 +74,7 @@ async function init() {
          name: 'Jane',
          surname: 'Doe',
          account_type: 'teller',
-         email: 'getrude@gmail.com',
+         email: 'mavegetty@gmail.com',
       });
    } catch (err) {
       console.log(String(err));
