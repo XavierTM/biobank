@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const Merchant = require("./Merchant");
 const Transaction = require("./Transaction");
 const User = require("./User");
+const AccountRecoveryRequest = require("./AccountRecoveryRequest");
 
 
 const dialect = `sqlite::${__dirname}/db.sqlite`;
@@ -11,11 +12,20 @@ const sequelize = new Sequelize(dialect, { logging: false });
 
 async function init() {
 
+   AccountRecoveryRequest.init(sequelize);
    Merchant.init(sequelize);
    Transaction.init(sequelize);
    User.init(sequelize);
 
    // relationships
+   /// AccountRecoveryRequest
+   AccountRecoveryRequest.belongsTo(User, {
+      foreignKey: {
+         name: 'user',
+         allowNull: false
+      }
+   });
+
    /// Merchant
    Merchant.belongsTo(User, {
       foreignKey: {
@@ -64,37 +74,11 @@ async function init() {
          name: 'Jane',
          surname: 'Doe',
          account_type: 'teller',
-         email: 'janedoe@biobank.com',
-         password: await hash('password', 1),
+         email: 'getrude@gmail.com',
       });
    } catch (err) {
       console.log(String(err));
    }
-
-   try {
-      await User.create({
-         name: 'Xavier',
-         surname: 'Mukodi',
-         email: 'xaviermukodi@gmail.com',
-         password: await hash('1111', 1),
-         balance: 100,
-      });
-   } catch (err) {
-      console.log(String(err));
-   }
-
-   try {
-      await User.create({
-         name: 'John',
-         surname: 'Doe',
-         email: 'johndoe@biobank.com',
-         password: await hash('password', 1),
-      });
-   } catch (err) {
-      console.log(String(err));
-   }
-
-
 
 }
 
