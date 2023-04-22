@@ -6,6 +6,8 @@ import { errorToast } from "../toast";
 import { hideLoading, showLoading } from "../loading";
 import swal from 'sweetalert';
 import request from "../request";
+import { v4 as uuid } from 'uuid'
+import { enrollFingeprint } from "../utils";
 
 
 
@@ -13,7 +15,7 @@ const divSignupStyle = css({
    maxWidth: 400, 
    minWidth: 200,
    '& > *': {
-      margin: '10px auto'
+      margin: '10px auto !important'
    },
    '& a': {
       display: 'inline-block',
@@ -31,15 +33,10 @@ class Signup extends Page {
       const txtName = document.getElementById('txt-name');
       const txtSurname = document.getElementById('txt-surname');
       const txtEmail = document.getElementById('txt-email');
-      const txtPassword = document.getElementById('txt-password');
-      const txtConfirm = document.getElementById('txt-confirm');
 
       const name  = txtName.value;
       const surname = txtSurname.value;
       const email = txtEmail.value;
-      const password = txtPassword.value;
-      const confirm = txtConfirm.value;
-
 
       if (!name) {
          errorToast("Provide your first name");
@@ -56,32 +53,19 @@ class Signup extends Page {
          return txtEmail.focus();
       }
 
-      if (!password) {
-         errorToast("Provide a password");
-         return txtPassword.focus();
-      }
-
-      if (!confirm) {
-         errorToast("Confirm your password");
-         return txtConfirm.focus();
-      }
-
-      if (password !== confirm) {
-         errorToast("Passwords not matching");
-         txtConfirm.value = '';
-         txtPassword.value = '';
-         return txtPassword.focus();
-      }
-
       try {
 
          showLoading();
+
+         const secret = uuid();
+
+         await enrollFingeprint(secret);
 
          const payload = {
             name,
             surname,
             email,
-            password
+            secret,
          }
 
          await request.post('/api/users', payload);
@@ -125,24 +109,6 @@ class Signup extends Page {
                id="txt-email"
                variant="standard"
                size="small"
-            />
-
-            <TextField
-               fullWidth
-               label="Password"
-               id="txt-password"
-               variant="standard"
-               size="small"
-               type="password"
-            />
-
-            <TextField
-               fullWidth
-               label="Confirm password"
-               id="txt-confirm"
-               variant="standard"
-               size="small"
-               type="password"
             />
   
             <Button fullWidth variant="contained" onClick={this.signup}>

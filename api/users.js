@@ -4,7 +4,6 @@ const Joi = require('@xavisoft/joi');
 const { ACCOUNT_TYPES, PASSWORD_SALT_ROUNDS } = require("./config");
 const User = require("./db/User");
 const Merchant = require("./db/Merchant");
-const { hash } = require("bcrypt");
 
 
 
@@ -20,15 +19,21 @@ users.post('/', async (req, res) => {
          surname: Joi.string().required(),
          account_type: Joi.valid(...ACCOUNT_TYPES),
          email: Joi.string().email().required(),
-         password: Joi.string().required(),
+         secret: Joi.string().required(),
       }
+
+      // check email
+      req.body.email = req.body.email.toLowerCase();
+      const count = User.count({ where: { email: req.body.email }});
+
+      if (count > 0)
+         return res.status(409).send('Email already in use');
 
       const error = Joi.getError(req.body, schema);
       if (error)
          return res.status(400).send(error);
 
       // save to db
-      req.body.password = await hash(req.body.password, PASSWORD_SALT_ROUNDS);
       const user = await User.create(req.body);
 
       // respond
