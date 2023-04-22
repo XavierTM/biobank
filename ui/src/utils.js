@@ -39,6 +39,7 @@ function enrollFingeprint(secret) {
          secret,
          invalidateOnEnrollment: true,
          disableBackup: true,
+         fallbackButtonTitle: 'USE PIN/PATTERN/PASSWORD',
        }, resolve, (err) => {
          reject (new Error(err.message));
        });
