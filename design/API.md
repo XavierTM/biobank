@@ -15,7 +15,9 @@ body: {
 **returns**: 
 ```
 body: {
-   account_secret: string
+   account_secret: string,
+   email: string,
+   password: string,
 }
 ```
 
@@ -90,5 +92,3 @@ body: {
    from: string
 }
 ```
-
-### Setup POS
