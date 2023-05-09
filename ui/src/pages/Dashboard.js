@@ -270,74 +270,78 @@ class Dashboard extends Page {
             </>
          }
 
-         contentJSX = <> 
+         contentJSX = <div
+            className="fill-container"
+            style={{
+               display: 'grid',
+               gridTemplateRows: '1fr auto'
+            }}
+         > 
 
-            <Grid container spacing={2}>
+            <div style={{ overflowY: 'auto' }}>
+               <Grid container spacing={2}>
 
-               <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={6}>
 
-                  <div style={{ padding: '0 20px', }}>
-                     <h2 className="grey-text">ACCOUNT DETAILS</h2>
+                     <div style={{ padding: '0 20px', }}>
+                        <h2 className="grey-text">ACCOUNT DETAILS</h2>
 
-                     <div className={divAccountDetailsStyle}>
+                        <div className={divAccountDetailsStyle}>
 
-                        <span>NAME</span>
-                        <span>{this.state.name} {this.state.surname}</span>
+                           <span>NAME</span>
+                           <span>{this.state.name} {this.state.surname}</span>
 
-                        <span>ACCOUNT NUMBER</span>
-                        <span>{this.state.account_no}</span>
+                           <span>ACCOUNT NUMBER</span>
+                           <span>{this.state.account_no}</span>
 
-                        <span>ACCOUNT CREATED</span>
-                        <span>{(new Date(this.state.createdAt)).toDateString()}</span>
+                           <span>ACCOUNT CREATED</span>
+                           <span>{(new Date(this.state.createdAt)).toDateString()}</span>
 
-                        <span>BALANCE</span>
-                        <span>{this.state.balance}</span>
+                           <span>BALANCE</span>
+                           <span>{this.state.balance}</span>
 
+                        </div>
                      </div>
-                  </div>
 
-               </Grid>
-
-
-               <Hidden mdUp>
-                  <Grid xs={12} style={{ marginTop: 10 }}>
-                     <Divider />
                   </Grid>
-               </Hidden>
 
-               <Grid item xs={12} md={6}>
 
-                  <div className="fill-container vh-align">
-                     <div style={{ padding: '0 10px', }}>
-                        <h2 className="grey-text center-align" style={{ marginBottom: 0 }}>BALANCE</h2>
-                        <span style={{ fontSize: 100 }}>{this.state.balance}</span>
+                  <Hidden mdUp>
+                     <Grid xs={12} style={{ marginTop: 10 }}>
+                        <Divider />
+                     </Grid>
+                  </Hidden>
+
+                  <Grid item xs={12} md={6}>
+
+                     <div className="fill-container vh-align">
+                        <div style={{ padding: '0 10px', }}>
+                           <h2 className="grey-text center-align" style={{ marginBottom: 0 }}>BALANCE</h2>
+                           <span style={{ fontSize: 100 }}>{this.state.balance}</span>
+                        </div>
                      </div>
-                  </div>
-               </Grid>
+                  </Grid>
 
-               <Grid item xs={12}>
-                  <Divider style={{ marginTop: 20 }} />
-               </Grid>
+                  <Grid item xs={12}>
+                     <Divider style={{ marginTop: 20 }} />
+                  </Grid>
 
-               <Grid item xs={12} md={6}>
-      
-                  <div style={{ padding: '0 20px', }}>
-                     <h2 className="grey-text">MERCHANTS</h2>
-                     {merchantsJSX}
-                  </div>
+                  <Grid item xs={12} md={6}>
+         
+                     <div style={{ padding: '0 20px', }}>
+                        <h2 className="grey-text">MERCHANTS</h2>
+                        {merchantsJSX}
+                     </div>
+                  </Grid>
                </Grid>
-            </Grid>
+            </div>
 
             <div 
                style={{
-                  position: 'fixed',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
                   background: '#1979D7',
                   boxShadow: '5px 5px 15px rgba(0,0,0,0.4)',
                   textAlign: 'right',
-                  paddingRight: 30,
+                  padding: 10,
                }}
             >
                
@@ -380,7 +384,7 @@ class Dashboard extends Page {
                fingerprintAvailable={this.state.fingerprintAvailable}
             />
 
-         </>
+         </div>
       }
 
       return <>
