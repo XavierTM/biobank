@@ -32,5 +32,3 @@ mv ui/build/* api/static
 cd mobile
 cordova build android
 cd ..
-
-pwd
